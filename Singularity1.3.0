@@ -1,0 +1,15 @@
+Bootstrap: docker
+From: ubuntu:disco
+
+%post
+	export VER=1.3.0
+	apt -y update
+	apt -y install gcc libboost-dev libboost-filesystem-dev wget unzip
+	wget http://lebesgue.fgcu.edu/iSeg/data/v${VER}.zip
+	unzip v${VER}.zip
+	cp -rv v${VER}/* /usr/bin
+
+	# iseg uses boost@1.66 while disco has boost@1.67
+	# ABIs are still compatible so we just change the links
+	ln -vs /usr/lib/x86_64-linux-gnu/libboost_system.so /usr/lib/x86_64-linux-gnu/libboost_system.so.1.66.0
+	ln -vs /usr/lib/x86_64-linux-gnu/libboost_filesystem.so /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.66.0
